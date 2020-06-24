@@ -1,18 +1,27 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const { mongoURL } = require("./config/keys");
+const config = require("config");
 const app = express();
-const items = require("./routes/api/items");
 const path = require("path");
 
 //Acts as middleware
 app.use(express.json());
 
-app.use("/api/items", items);
+//db config
+const db = config.get("mongoURL");
+
+//Use Routes
+app.use("/api/items", require("./routes/api/items"));
+app.use("/api/users", require("./routes/api/users"));
+app.use("/api/auth", require("./routes/api/auth"));
 
 //Connect to mongo
 mongoose
-  .connect(mongoURL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(db, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
   .then(() => {
     console.log("Mongo DB connected....");
   })

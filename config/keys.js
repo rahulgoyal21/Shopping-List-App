@@ -1,4 +1,0 @@
-module.exports = {
-  mongoURL:
-    "mongodb+srv://rahulgoyal:phunshukh21@shopping-list-cluster-iqmtw.mongodb.net/Shopping_list_app?retryWrites=true&w=majority",
-};
