@@ -15,30 +15,34 @@ class ShoppingList extends Component {
   };
   render() {
     const { items } = this.props.item;
+    const { isAuthenticated } = this.props.auth;
+
     return (
       <div>
         <Container>
-          <ListGroup>
-            <TransitionGroup className="shopping-list">
-              {items.map(({ _id, name }) => (
-                <CSSTransition key={_id} timeout={500} classNames="fade">
-                  <ListGroupItem>
-                    <Button
-                      className="remove-btn"
-                      color="danger"
-                      size="sm"
-                      onClick={() => {
-                        this.deleteItemClicked(_id);
-                      }}
-                    >
-                      &times;
-                    </Button>
-                    {name}
-                  </ListGroupItem>
-                </CSSTransition>
-              ))}
-            </TransitionGroup>
-          </ListGroup>
+          {isAuthenticated && (
+            <ListGroup>
+              <TransitionGroup className="shopping-list">
+                {items.map(({ _id, name }) => (
+                  <CSSTransition key={_id} timeout={500} classNames="fade">
+                    <ListGroupItem>
+                      <Button
+                        className="remove-btn"
+                        color="danger"
+                        size="sm"
+                        onClick={() => {
+                          this.deleteItemClicked(_id);
+                        }}
+                      >
+                        &times;
+                      </Button>
+                      {name}
+                    </ListGroupItem>
+                  </CSSTransition>
+                ))}
+              </TransitionGroup>
+            </ListGroup>
+          )}
         </Container>
       </div>
     );
@@ -51,6 +55,7 @@ ShoppingList.propTypes = {
 };
 const mapStateToProps = (state) => ({
   item: state.item,
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, { getItems, deleteItems })(

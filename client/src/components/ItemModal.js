@@ -29,52 +29,61 @@ class ItemModal extends Component {
   onSubmit = (e) => {
     e.preventDefault();
     const newItem = { name: this.state.name };
-
     //Add item via addItem action
     this.props.addItems(newItem);
-
     //close modal
     this.toggle();
   };
   render() {
+    const { isAuthenticated } = this.props.auth;
     return (
       <Container>
-        <Button
-          color="dark"
-          style={{ marginBottom: "2rem" }}
-          onClick={this.toggle}
-        >
-          Add Item
-        </Button>
-        <Modal isOpen={this.state.modal} toggle={this.toggle}>
-          <ModalHeader>Enter The Item To Be Added</ModalHeader>
-          <ModalBody>
-            <Form onSubmit={this.onSubmit}>
-              <FormGroup>
-                <Label for="item">Item</Label>
-                <Input
-                  type="text"
-                  name="name"
-                  id="item"
-                  placeholder="Add Shopping Item"
-                  onChange={this.onChange}
-                />
-                <Button
-                  type="submit"
-                  color="dark"
-                  style={{ marginTop: "1rem" }}
-                  block
-                >
-                  Add
-                </Button>
-              </FormGroup>
-            </Form>
-          </ModalBody>
-        </Modal>
+        {isAuthenticated ? (
+          <Container>
+            <Button
+              color="dark"
+              style={{ marginBottom: "2rem" }}
+              onClick={this.toggle}
+            >
+              Add Item
+            </Button>
+            <Modal isOpen={this.state.modal} toggle={this.toggle}>
+              <ModalHeader>Enter The Item To Be Added</ModalHeader>
+              <ModalBody>
+                <Form onSubmit={this.onSubmit}>
+                  <FormGroup>
+                    <Label for="item">Item</Label>
+                    <Input
+                      type="text"
+                      name="name"
+                      id="item"
+                      placeholder="Add Shopping Item"
+                      onChange={this.onChange}
+                    />
+                    <Button
+                      type="submit"
+                      color="dark"
+                      style={{ marginTop: "1rem" }}
+                      block
+                    >
+                      Add
+                    </Button>
+                  </FormGroup>
+                </Form>
+              </ModalBody>
+            </Modal>
+          </Container>
+        ) : (
+          <Container>
+            <span className="mb-3 ml-4">
+              <strong>Please Login To Add Items</strong>
+            </span>
+          </Container>
+        )}
       </Container>
     );
   }
 }
 
-const mapStateToProps = (state) => ({ item: state.item });
+const mapStateToProps = (state) => ({ item: state.item, auth: state.auth });
 export default connect(mapStateToProps, { addItems })(ItemModal);
